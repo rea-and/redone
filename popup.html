@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Redone - Reddit Post Filter</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="popup-wrapper">
+    <!-- Header -->
+    <header class="header">
+      <div class="logo-area">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </div>
+        <div>
+          <h1 class="logo-title">Redone</h1>
+          <p class="logo-subtitle">Desktop Reddit Post Filter</p>
+        </div>
+      </div>
+      <div class="status-badge" title="Active and protecting your feed">
+        <span class="status-dot"></span> Active
+      </div>
+    </header>
+
+    <!-- Stats Cards -->
+    <section class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-value" id="stat-total">0</div>
+        <div class="stat-label">Total Hidden</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="stat-today">0</div>
+        <div class="stat-label">Today</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="stat-x">0</div>
+        <div class="stat-label">Via ✕ Button</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="stat-open">0</div>
+        <div class="stat-label">Via Opened</div>
+      </div>
+    </section>
+
+    <!-- Navigation Tabs -->
+    <nav class="tabs">
+      <button class="tab-btn active" data-tab="settings">Settings</button>
+      <button class="tab-btn" data-tab="history">Recent Posts (<span id="history-count">0</span>)</button>
+    </nav>
+
+    <!-- Tab: Settings -->
+    <div class="tab-content active" id="tab-settings">
+      <div class="setting-group">
+        <label class="setting-item">
+          <div class="setting-info">
+            <span class="setting-title">Show "✕" button on posts</span>
+            <span class="setting-desc">Adds a quick dismiss icon to each post row</span>
+          </div>
+          <input type="checkbox" id="setting-hide-on-x" class="toggle-input">
+          <span class="toggle-slider"></span>
+        </label>
+
+        <label class="setting-item">
+          <div class="setting-info">
+            <span class="setting-title">Hide posts when opened</span>
+            <span class="setting-desc">Auto-hides any post you open or visit</span>
+          </div>
+          <input type="checkbox" id="setting-hide-on-open" class="toggle-input">
+          <span class="toggle-slider"></span>
+        </label>
+
+        <label class="setting-item">
+          <div class="setting-info">
+            <span class="setting-title">Hide when opened in new tab</span>
+            <span class="setting-desc">Immediately collapses the post from current feed on middle/Ctrl+click</span>
+          </div>
+          <input type="checkbox" id="setting-hide-new-tab" class="toggle-input">
+          <span class="toggle-slider"></span>
+        </label>
+
+        <label class="setting-item">
+          <div class="setting-info">
+            <span class="setting-title">Show Undo notification</span>
+            <span class="setting-desc">Displays a floating toast with Undo button when dismissing</span>
+          </div>
+          <input type="checkbox" id="setting-show-toast" class="toggle-input">
+          <span class="toggle-slider"></span>
+        </label>
+
+        <div class="setting-dropdown-row">
+          <div class="setting-info">
+            <span class="setting-title">Hide style</span>
+            <span class="setting-desc">How hidden posts are treated on the page</span>
+          </div>
+          <select id="setting-hide-style" class="select-input">
+            <option value="collapse">Collapse completely</option>
+            <option value="dim">Dim & grayscale</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Footer Data Actions -->
+      <div class="data-actions">
+        <button type="button" id="btn-export" class="action-btn-secondary">Export</button>
+        <button type="button" id="btn-import-trigger" class="action-btn-secondary">Import</button>
+        <input type="file" id="file-import" accept=".json" style="display: none;">
+        <button type="button" id="btn-clear-history" class="action-btn-danger">Clear History</button>
+      </div>
+    </div>
+
+    <!-- Tab: Recent Posts History -->
+    <div class="tab-content" id="tab-history">
+      <div class="search-box">
+        <svg class="search-icon" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+        </svg>
+        <input type="text" id="search-input" placeholder="Search hidden posts..." autocomplete="off">
+      </div>
+
+      <div class="history-list" id="history-list">
+        <!-- Rendered dynamically -->
+        <div class="empty-state">No hidden posts yet. Browse Reddit and click ✕ or open posts to start!</div>
+      </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div class="modal-overlay" id="clear-modal">
+      <div class="modal-box">
+        <h3 class="modal-title">Clear Hidden Posts?</h3>
+        <p class="modal-desc">This will unhide all posts and reset your hidden history. This action cannot be undone.</p>
+        <div class="modal-actions">
+          <button type="button" id="modal-cancel-btn" class="modal-btn-cancel">Cancel</button>
+          <button type="button" id="modal-confirm-btn" class="modal-btn-confirm">Yes, Clear All</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
